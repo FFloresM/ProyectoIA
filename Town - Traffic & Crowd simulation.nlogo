@@ -19,22 +19,22 @@ globals[
   redH           ;;how many times there was red in the horizontal direction
   greenH         ;;how many times there was green in the horizontal direction
   speedLimit     ;;the global maximum speed in the city
-  
+
 ]
 persons-own[
   speed          ;;current speed of person
   walk-time      ;;how long they will walk before crossing the road
   crossing-part  ;;it divides the crossing to parts
   waiting?       ;;is pedestrian waiting for crossing the road?
-  
+
 ]
 
 cars-own[
   speed          ;;car's current speed
-  maxSpeed       ;;each car has its own maximum speed depending on the global maximum speeed (little bit lower or higher) 
+  maxSpeed       ;;each car has its own maximum speed depending on the global maximum speeed (little bit lower or higher)
   will-turn?     ;;whether car is going to turn or not
   turnX          ;;coordinates of patch where car will change its direction when turning left
-  turnY          ;;coordinates of patch where car will change its direction when turning left 
+  turnY          ;;coordinates of patch where car will change its direction when turning left
   politeness     ;;how politeness cars are, that means how often they will stop and let people cross the road
   will-stop?     ;;whether the car will stop and let pedestrian(s) to cross the road
 ]
@@ -45,23 +45,23 @@ to setup
   set speedLimit speed-limit
   draw-sidewalk
   draw-roads
-  draw-houses&trees
-  draw-crossings
+  ;;draw-houses&trees
+  ;;draw-crossings
   place-cars
   place-lights
-  place-people
-  
+  ;;place-people
+
   reset-ticks
   tick
-  
+
 end
 
-to go 
+to go
   move-cars
   control-traffic-lights
   move-people
   plot-waiting
-  
+
   tick
 end
 
@@ -72,7 +72,7 @@ to control-traffic-lights
 end
 
 to change-color [lights D]
-  
+
   ask one-of lights [
     ifelse color = red [
       ifelse D = "H" [
@@ -85,9 +85,9 @@ to change-color [lights D]
         set redH redH + 1][
         set redV redV + 1]
         ]
-    
+
   ]
-  
+
   ask lights [
     ifelse color = red [set color green][set color red]
   ]
@@ -102,7 +102,7 @@ to draw-roads
   set pcolor grey
   set meaning "crossroad"
     ]
-  
+
   ;roads-up
   ask patches with [pxcor mod 40 = 39 and meaning != "crossroad"] [
     set pcolor grey
@@ -113,7 +113,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-up"]
-  
+
   ask patches with [pxcor mod 40 = 0 and meaning != "crossroad"] [
     set pcolor grey
     sprout 1 [
@@ -123,7 +123,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-up"]
-  
+
   ;roads-down
   ask patches with [pxcor mod 40 = 36 and meaning != "crossroad"] [
     set pcolor grey
@@ -134,7 +134,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-down"]
-  
+
   ask patches with [pxcor mod 40 = 37 and meaning != "crossroad"] [
     set pcolor grey
     sprout 1 [
@@ -144,7 +144,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-down"]
-  
+
   ;roads-right
   ask patches with [pycor mod 22 = 21 and meaning != "crossroad"] [
     set pcolor grey
@@ -155,7 +155,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-left"]
-  
+
   ask patches with [pycor mod 22 = 0 and meaning != "crossroad"] [
     set pcolor grey
     sprout 1 [
@@ -165,7 +165,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-left"]
-  
+
   ;roads-left
   ask patches with [pycor mod 22 = 19 and meaning != "crossroad"] [
     set pcolor grey
@@ -176,7 +176,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-right"]
-  
+
   ask patches with [pycor mod 22 = 18 and meaning != "crossroad"] [
     set pcolor grey
     sprout 1 [
@@ -186,7 +186,7 @@ to draw-roads
       stamp die
     ]
     set meaning "road-right"]
-  
+
   ask patches with [pxcor mod 40 = 38 and meaning != "crossroad"] [
     set pcolor white
     sprout 1 [
@@ -198,7 +198,7 @@ to draw-roads
     ]
     set meaning "road-middle-v"
   ]
-  
+
   ;the middle lanes
   ask patches with [pycor mod 22 = 20 and meaning != "crossroad"] [
     set pcolor white
@@ -214,10 +214,10 @@ to draw-roads
 end
 
 to draw-sidewalk
-  
+
   ;sidewalks
-  ask patches with [pxcor mod 40 = 1 or pxcor mod 40 = 2 or pxcor mod 40 = 3 
-    or pxcor mod 40 = 35 or pxcor mod 40 = 34 or pxcor mod 40 = 33 or pycor mod 22 = 1 
+  ask patches with [pxcor mod 40 = 1 or pxcor mod 40 = 2 or pxcor mod 40 = 3
+    or pxcor mod 40 = 35 or pxcor mod 40 = 34 or pxcor mod 40 = 33 or pycor mod 22 = 1
     or pycor mod 22 = 2 or pycor mod 22 = 3 or pycor mod 22 = 15 or pycor mod 22 = 16 or pycor mod 22 = 17] [
   set pcolor brown + 2
   sprout 1 [
@@ -227,11 +227,11 @@ to draw-sidewalk
     die
   ]
   set meaning "sidewalk"]
-  
+
 end
 
 to draw-houses&trees
-  
+
   ;create couple of houses
   ask patches with [pcolor = black] [
     if count neighbors with [pcolor = black] = 8 and not any? turtles in-radius 4 [
@@ -242,11 +242,11 @@ to draw-houses&trees
       ]
     ]
   ]
-  
+
   ;create couple of trees
   ask patches with [pcolor = black] [
     if count neighbors with [pcolor = black] = 8 and not any? turtles in-radius 2[
-      if random 100 > 90 [ 
+      if random 100 > 90 [
         sprout-trees 1 [
           set shape one-of ["tree" "tree pine"]
           set size 4
@@ -256,18 +256,18 @@ to draw-houses&trees
       ]
     ]
   ]
-  
+
   ;let them die at the end because of the proper functionality of the function "not any? turtles in radius 2"
   ask houses [die]
   ask trees [die]
 end
 
 to draw-trees
-  
+
 end
 
 to draw-crossings
-  
+
   ;create pairs of crossings on roads-up
   ask patches with [(meaning = "road-up" or meaning = "road-down" or meaning = "road-middle-v") and (pycor mod 22 = 8 or pycor mod 22 = 9)][
     sprout-crossings 1 [
@@ -277,15 +277,15 @@ to draw-crossings
       set size 1
     ]
   ]
-  
+
   ;make a random position of crossings on roads-up
   ask crossings with [pxcor mod 40 = 38] [
     let newY one-of [1 -1]
     ask crossings in-radius 3 with [shape = "crossing"] [
-      set ycor ycor + newY 
+      set ycor ycor + newY
     ]
   ]
-  
+
   ;create waitpoints for pedestrians
   ask crossings with [pxcor mod 40 = 38] [
     set shape "waitpoint"
@@ -293,8 +293,8 @@ to draw-crossings
     set color black + 1
     stamp die
   ]
-  
-  
+
+
   ;create pairs of crossings on roads-down
   ask patches with [(meaning = "road-left" or meaning = "road-right" or meaning = "road-middle-h") and (pxcor mod 40 = 18 or pxcor mod 40 = 19)][
     sprout-crossings 1 [
@@ -304,16 +304,16 @@ to draw-crossings
       set size 1
     ]
   ]
-  
+
   ;make a random position of crossings on roads-down
   ask crossings with [pycor mod 22 = 20] [
     let newX one-of [1 2 3 4 5 -1 -2 -3 -4 -5]
     ask crossings in-radius 3 with [shape = "crossing"] [
-      set xcor xcor + newX 
+      set xcor xcor + newX
     ]
   ]
-  
-  
+
+
   ask crossings with [pycor mod 22 = 20] [
     set heading 90
     set shape "waitpoint"
@@ -321,7 +321,7 @@ to draw-crossings
     set color black + 1
     stamp die
   ]
-  
+
   ;necessary row for crossings on the edges (function in-radius doesn't work)
   ask crossings [
     set will-cross? false
@@ -329,7 +329,7 @@ to draw-crossings
     stamp
     die
   ]
-  
+
   ask patches with [meaning = "crossing"] [
     ask neighbors4 [
       if meaning = "sidewalk" [
@@ -340,7 +340,7 @@ to draw-crossings
 end
 
 to place-cars
-  
+
   ;make a random placement of cars
   ask n-of (num-of-cars / 3) patches with [meaning = "road-up"] [
     if not any? cars-on patch pxcor (pycor + 1) and not any? cars-here and not any? cars-on patch pxcor (pycor - 1) and not any? patches with [meaning = "crossing"] in-radius 2 [
@@ -360,7 +360,7 @@ to place-cars
       ]
     ]
   ]
-  
+
   ask n-of (num-of-cars / 3) patches with [meaning = "road-down" and count turtles-on neighbors = 0] [
     if not any? cars-on patch pxcor (pycor + 1) and not any? cars-here and not any? cars-on patch pxcor (pycor - 1) and not any? patches with [meaning = "crossing"] in-radius 2 [
       sprout-cars 1 [
@@ -379,7 +379,7 @@ to place-cars
       ]
     ]
   ]
-  
+
   ask n-of (num-of-cars / 3) patches with [meaning = "road-left" and count turtles-on neighbors = 0] [
     if not any? cars-on patch (pxcor + 1) pycor and not any? cars-here and not any? cars-on patch (pxcor - 1) pycor and not any? patches with [meaning = "crossing"] in-radius 2 [
       sprout-cars 1 [
@@ -398,7 +398,7 @@ to place-cars
       ]
     ]
   ]
-  
+
   while [count cars < num-of-cars] [
     ask one-of patches with [meaning = "road-right"] [
       if not any? cars-on patch (pxcor + 1) pycor and not any? cars-here and not any? cars-on patch (pxcor - 1) pycor and not any? patches with [meaning = "crossing"] in-radius 2 [
@@ -419,7 +419,7 @@ to place-cars
       ]
     ]
   ]
-  
+
 end
 
 to place-people
@@ -430,8 +430,8 @@ to place-people
         set size 1
         set waiting? false
         set walk-time random time-to-crossing
-        set shape one-of ["person business" "person construction" "person doctor" 
-          "person farmer" "person graduate" "person lumberjack" "person police" "person service" 
+        set shape one-of ["person business" "person construction" "person doctor"
+          "person farmer" "person graduate" "person lumberjack" "person police" "person service"
           "person student" "person soldier"
         ]
       ]
@@ -446,33 +446,33 @@ to place-lights
       set shape "lights"
     ]
   ]
-  
+
   ask patches with [(pycor mod 22 = 19 or pycor mod 22 = 18) and pxcor mod 40 = 35] [
     sprout-lightsR 1 [
       set color red
       set shape "lights"
     ]
   ]
-  
+
   ask patches with [(pxcor mod 40 = 36 or pxcor mod 40 = 37) and pycor mod 22 = 1] [
     sprout-lightsD 1 [
       set color green
       set shape "lights"
     ]
   ]
-  
+
   ask patches with [(pxcor mod 40 = 39 or pxcor mod 40 = 0) and pycor mod 22 = 17] [
     sprout-lightsU 1 [
       set color green
       set shape "lights"
     ]
   ]
-  
+
   set greenH 0
   set redH 1
   set redV 0
   set greenV 1
-  
+
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Car procedures ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -485,26 +485,26 @@ to control-speed
   [
     ifelse [speed] of car-ahead = 0 [set speed 0] [
       ifelse [speed] of car-ahead >= maxSpeed [
-        set speed maxSpeed 
+        set speed maxSpeed
         set speed speed - deceleration
       ] [
       ;try to overtake
       ifelse [meaning] of patch-left-and-ahead 90 1 = meaning and not any? turtles-on patch-left-and-ahead 90 1 and [meaning] of patch-left-and-ahead 90 1 != "crossroad"
       and meaning != "crossing" and [meaning] of patch-left-and-ahead 180 1.3 != "crossing" and not any? turtles-on patch-left-and-ahead 169 3
-      and not any? turtles-on patch-left-and-ahead 45 1 and not any? turtles-on patch-left-and-ahead 135 1 and not any? turtles-on patch-left-and-ahead 23 2 
+      and not any? turtles-on patch-left-and-ahead 45 1 and not any? turtles-on patch-left-and-ahead 135 1 and not any? turtles-on patch-left-and-ahead 23 2
       and not any? turtles-on patch-left-and-ahead 157 2 and not any? turtles-on patch-left-and-ahead 12 3 and [meaning] of patch-ahead 1 != "crossing" [move-to patch-left-and-ahead 90 1] [
-        
-        
+
+
         ifelse [meaning] of patch-right-and-ahead 90 1 = meaning and not any? turtles-on patch-right-and-ahead 90 14 and [meaning] of patch-right-and-ahead 90 1 != "crossroad"
         and meaning != "crossing" and [meaning] of patch-right-and-ahead 180 1.3 != "crossing" and not any? turtles-on patch-right-and-ahead 12 3
-        and not any? turtles-on patch-right-and-ahead 45 1 and not any? turtles-on patch-right-and-ahead 135 1 and not any? turtles-on patch-right-and-ahead 23 2 
+        and not any? turtles-on patch-right-and-ahead 45 1 and not any? turtles-on patch-right-and-ahead 135 1 and not any? turtles-on patch-right-and-ahead 23 2
         and not any? turtles-on patch-right-and-ahead 157 2 and not any? turtles-on patch-right-and-ahead 169 3 and [meaning] of patch-ahead 1 != "crossing"[move-to patch-right-and-ahead 90 1] [
-          set speed [speed] of car-ahead 
-          set speed speed - deceleration]        
+          set speed [speed] of car-ahead
+          set speed speed - deceleration]
       ]
-      
-      
-      
+
+
+
       ]
     ]
   ]
@@ -549,7 +549,7 @@ to move-cars
         ]
       ]
     ]
-    
+
     if will-turn? = "yesR" [
       ifelse not any? cars-on patch-right-and-ahead 55 1 [
         if speed < 15 [
@@ -562,7 +562,7 @@ to move-cars
         set speed 0
       ]
     ]
-    
+
     if will-turn? = "yesL" [
       ifelse safe-to-turn? [
         if speed < 15 [
@@ -577,29 +577,29 @@ to move-cars
       [
         set speed 0
       ]
-      
+
     ]
-    
+
     if meaning = "crossing" [
       set will-turn? "maybe"
     ]
-    
+
     check-crossing
-    
+
     ;whether traffic lights show red or green
     ifelse not any? (lightsR-on patch-ahead 1.5) with [color = red] and not any? (lightsL-on patch-ahead 1.5) with [color = red]
     and not any? (lightsD-on patch-ahead 1.5) with [color = red] and not any? (lightsU-on patch-ahead 1.5) with [color = red] [fd speed / 200 ] [set speed 0]
-    
+
   ]
 end
 
 to check-crossing
-  
+
   if [meaning] of patch-ahead 1 = "crossing" and will-stop? = "maybe"[
     if [used] of patch-ahead 1 = 0 and will-stop? = "maybe"[
       set will-stop? "no"
       ask patch-ahead 1 [
-        set traffic traffic + 1 
+        set traffic traffic + 1
         ask other neighbors with [meaning = "crossing"] [set traffic traffic + 1]
       ]
     ]
@@ -611,28 +611,28 @@ to check-crossing
       [
         set will-stop? "no"
         ask patch-ahead 1 [
-          set traffic traffic + 1 
+          set traffic traffic + 1
           ask other neighbors with [meaning = "crossing"] [set traffic traffic + 1]
-        ] 
+        ]
         if any? persons-on patch-ahead 1 or any? persons-on patch-ahead 2 [set speed 0]
       ]
     ]
   ]
-  
+
   if [meaning] of patch-ahead 1 = "crossing" and [meaning] of patch-ahead 2 = "crossing" and will-stop? = "yes" and [used] of patch-ahead 1 > 0 [set speed 0]
-  
+
   if [meaning] of patch-left-and-ahead 180 1 = "crossing" and [meaning] of patch-left-and-ahead 180 2 = "crossing" and will-stop? = "no" and meaning != "crossing" [
     set will-stop? "maybe"
     ask patch-left-and-ahead 180 1 [
-      set traffic traffic - 1 
+      set traffic traffic - 1
       ask other neighbors with [meaning = "crossing"] [set traffic traffic - 1]
     ]
   ]
-  
+
   if meaning = "crossroad" and will-stop? != "maybe" [
     set will-stop? "maybe"
   ]
-  
+
 end
 
 ;it is safe to turn left, that means no cars that I could hit while turning left
@@ -648,7 +648,7 @@ to-report safe-to-turn?
 end
 
 to check-pedestrians
-  
+
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; People's procedures ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -668,7 +668,7 @@ to move-people
     ]
     [walk]
   ]
-  
+
 end
 
 to walk
@@ -679,15 +679,15 @@ to walk
       set walk-time walk-time + 1
     ]
     [fd speed / 200 set walk-time walk-time + 1]
-  ]  
-  [ 
+  ]
+  [
     rt random 120
     lt random 120
     if [meaning] of patch-ahead 1 = "sidewalk" or [meaning] of patch-ahead 1 = "waitpoint" [
       fd speed / 200
     ]
     set walk-time walk-time + 1
-  ] 
+  ]
 end
 
 to cross-the-street
@@ -708,7 +708,7 @@ to cross-the-street
     lt 180
     ask patches in-cone 3 180 with [meaning = "crossing"] [set used used + 1]
     set crossing-part 3
-  ] 
+  ]
   if crossing-part = 3 and meaning = "waitpoint" [
     rt 180
     ask patches in-cone 3 180 with [meaning = "crossing"] [set used used - 1]
@@ -729,12 +729,12 @@ to cross-the-street
       if not any? cars-on patch-ahead 1 [
         fd speed / 200 set waiting? false
       ]
-    ] 
+    ]
   ]
-  
-  
-  
-  
+
+
+
+
 end
 
 
@@ -749,11 +749,11 @@ end
 GRAPHICS-WINDOW
 210
 10
-1010
-450
+1018
+459
 -1
 -1
-10
+10.0
 1
 10
 1
@@ -771,7 +771,7 @@ GRAPHICS-WINDOW
 0
 1
 ticks
-30
+30.0
 
 BUTTON
 18
@@ -816,7 +816,7 @@ num-of-cars
 num-of-cars
 0
 200
-100
+100.0
 1
 1
 NIL
@@ -831,7 +831,7 @@ lights-interval
 lights-interval
 1
 50
-10
+10.0
 1
 1
 NIL
@@ -876,7 +876,7 @@ speed-limit
 speed-limit
 30
 150
-70
+70.0
 1
 1
 NIL
@@ -891,7 +891,7 @@ num-of-people
 num-of-people
 0
 1000
-100
+100.0
 1
 1
 NIL
@@ -906,7 +906,7 @@ prob-of-turning
 prob-of-turning
 0
 100
-40
+40.0
 1
 1
 NIL
@@ -932,7 +932,7 @@ time-to-crossing
 time-to-crossing
 400
 5000
-1000
+1000.0
 1
 1
 NIL
@@ -947,7 +947,7 @@ basic-politeness
 basic-politeness
 0
 100
-50
+50.0
 1
 1
 NIL
@@ -972,15 +972,16 @@ PLOT
 Number of waiting pedestrians
 Time
 Waiting persons
-0
-10
-0
-10
+0.0
+10.0
+0.0
+10.0
 true
 false
 "" ""
 PENS
-"Waiting pedestrians" 1 0 -14070903 true "" ""
+"Waiting pedestrians" 1.0 0 -14070903 true "" ""
+
 @#$#@#$#@
 ## WHAT IS IT?
 
@@ -1774,22 +1775,22 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.2
+NetLogo 6.0.4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 default
-0
--0.2 0 0 1
-0 1 1 0
-0.2 0 0 1
+0.0
+-0.2 0 0.0 1.0
+0.0 1 1.0 0.0
+0.2 0 0.0 1.0
 link direction
 true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-
+0
 @#$#@#$#@
